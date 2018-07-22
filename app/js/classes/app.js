@@ -302,7 +302,7 @@ var App = function(name, version) {
 
     $(document).on("keydown", function(e) {
       //global ctrl+z
-      if ((e.metaKey || e.ctrlKey) && !self.editing()) {
+      if (self.isCtrlPressed(e) && !self.editing()) {
         switch (e.keyCode) {
           case 90:
             self.historyDirection("undo");
@@ -321,7 +321,7 @@ var App = function(name, version) {
         return;
       }
 
-      if (e.ctrlKey || e.metaKey) {
+      if (self.isCtrlPressed(e)) {
         if (e.shiftKey) {
           switch (e.keyCode) {
             case 83:
@@ -477,6 +477,10 @@ var App = function(name, version) {
       }
     };
   };
+
+  this.isCtrlPressed = function(e) {
+    return (e.metaKey || e.ctrlKey) && !e.altKey;
+  }
 
   this.getNodesConnectedTo = function(toNode) {
     var connectedNodes = [];
@@ -1022,7 +1026,7 @@ var App = function(name, version) {
     var startOffset, endOffset;
 
     // ctrl + z
-    if ((e.metaKey || e.ctrlKey) && e.keyCode == 90) {
+    if (self.isCtrlPressed(e) && e.keyCode == 90) {
       if (self.editingHistory.length > 0) {
         var last = self.editingHistory.pop();
         text = last.text;
@@ -1046,7 +1050,7 @@ var App = function(name, version) {
       endOffset = preCaretEndRange.toString().length;
 
       // ctrl + c
-      if ((e.metaKey || e.ctrlKey) && e.keyCode == 67) {
+      if (self.isCtrlPressed(e) && e.keyCode == 67) {
         if (self.gui != undefined) {
           var clipboard = self.gui.Clipboard.get();
           clipboard.set(
@@ -1056,7 +1060,7 @@ var App = function(name, version) {
         }
       } else {
         // ctrl + v
-        if ((e.metaKey || e.ctrlKey) && e.keyCode == 86) {
+        if (self.isCtrlPressed(e) && e.keyCode == 86) {
           var clipboard = self.gui.Clipboard.get();
           console.log(clipboard);
           text =
@@ -1066,7 +1070,7 @@ var App = function(name, version) {
           startOffset = endOffset = startOffset + clipboard.get("text").length;
         }
         // ctrl + x
-        else if ((e.metaKey || e.ctrlKey) && e.keyCode == 88) {
+        else if (self.isCtrlPressed(e) && e.keyCode == 88) {
           if (self.gui != undefined) {
             var clipboard = self.gui.Clipboard.get();
             clipboard.set(
